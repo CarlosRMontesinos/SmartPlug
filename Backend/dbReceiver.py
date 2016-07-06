@@ -42,7 +42,7 @@ def on_message(mqttc, obj, msg):
     print(msg.topic+" "+str(msg.qos)+" "+str(msg.payload))
 
     # Create a connection and cursor with the DB
-    dbConnection = sqlite3.connect('Data.db')
+    dbConnection = sqlite3.connect("C:\Users\Robotics.Phd\.ssh\Documents\DataBases\SmartPlugData.db")
     dbCursor = dbConnection.cursor()
 
     # Get timestamp in EPOCH/UTC
@@ -50,7 +50,7 @@ def on_message(mqttc, obj, msg):
     sTimeStamp = (sTime,) # To avoid HACKERS
 
     # Insert a row of data
-    dbCursor.execute("INSERT INTO stocks VALUES (?,'BUY','RHAT',100,35.14)", sTimeStamp)
+    dbCursor.execute("INSERT INTO rawData VALUES (?,'0','on','turn_on','120.0','1.0','120.0','0','off','turn_on')", sTimeStamp)
 
     # Save (commit) the changes
     dbConnection.commit()
@@ -86,6 +86,7 @@ mqttc.on_subscribe = on_subscribe
 mqttc.username_pw_set('iajmzgae', 'bNl5xzae8mox')
 mqttc.connect("m12.cloudmqtt.com", 16186, 60)
 mqttc.subscribe("SmartPlug", 0)
+mqttc.subscribe("SmartPlugData", 0)
 
 mqttc.loop_forever()
 
